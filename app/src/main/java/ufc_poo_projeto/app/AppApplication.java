@@ -44,8 +44,10 @@ public class AppApplication implements CommandLineRunner {
 					String emailC = scanner.next();
 					System.out.println("Digite seu cpf: ");
 					String cpfC = scanner.next();
+					System.out.println("Digite sua palavra chave: ");
+					String palavraChaveC = scanner.next();
 
-					Usuario usuario = new Usuario(usernameC, cpfC, emailC, senhaC);
+					Usuario usuario = new Usuario(usernameC, cpfC, emailC, senhaC, palavraChaveC);
 					break;
 			}
 	}

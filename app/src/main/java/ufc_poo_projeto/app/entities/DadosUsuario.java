@@ -9,6 +9,7 @@ public class DadosUsuario {
     private String cpf;
     private String email;
     private String senha;
+    private String palavraChave;
 
     @JsonCreator
     public DadosUsuario (
@@ -16,13 +17,19 @@ public class DadosUsuario {
             @JsonProperty("nome") String nome,
             @JsonProperty("cpf") String cpf,
             @JsonProperty("email") String email,
-            @JsonProperty("senha") String senha
+            @JsonProperty("senha") String senha,
+            @JsonProperty("palavraChave") String palavraChave
     ) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
         this.senha = senha;
+        this.palavraChave = palavraChave;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getNome() {
@@ -55,5 +62,13 @@ public class DadosUsuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getPalavraChave() {
+        return palavraChave;
+    }
+
+    public void setPalavraChave(String palavraChave) {
+        this.palavraChave = palavraChave;
     }
 }

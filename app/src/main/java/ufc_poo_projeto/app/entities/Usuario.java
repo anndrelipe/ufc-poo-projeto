@@ -1,15 +1,13 @@
 package ufc_poo_projeto.app.entities;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.Scanner;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Usuario{
 
@@ -20,16 +18,27 @@ public class Usuario{
     private String cpf;
     private String email;
     private String senha;
+    private String palavraChave;
 
     // Construtor
-    public Usuario(String nome, String cpf, String email, String senha){
+    public Usuario(String nome, String cpf, String email, String senha, String palavraChave){
         this.ID = idNaoCadastrado++;
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
         this.senha = senha;
+        this.palavraChave = palavraChave;
 
-        this.salvarUsuario(this.ID, nome, cpf, email, senha);
+        this.salvarUsuario(this.ID, nome, cpf, email, senha, palavraChave);
+    }
+
+    public Usuario(DadosUsuario dadosUsuario) {
+        this.ID = dadosUsuario.getId();
+        this.nome = dadosUsuario.getNome();
+        this.cpf = dadosUsuario.getCpf();
+        this.email = dadosUsuario.getEmail();
+        this.senha = dadosUsuario.getSenha();
+        this.palavraChave = dadosUsuario.getPalavraChave();
     }
 
 
@@ -74,7 +83,15 @@ public class Usuario{
         this.senha = senha;
     }
 
-    private void salvarUsuario(int id, String nome, String cpf, String email, String senha) {
+    public void setPalavraChave(String palavraChave){
+        this.palavraChave = palavraChave;
+    }
+
+    public String getPalavraChave(){
+        return this.palavraChave;
+    }
+
+    private void salvarUsuario(int id, String nome, String cpf, String email, String senha, String palavraChave) {
         try {
             JSONArray usuarios = this.carregarUsuarios();
 
@@ -84,6 +101,7 @@ public class Usuario{
             novoUsuario.put("cpf", cpf);
             novoUsuario.put("email", email);
             novoUsuario.put("senha", senha);
+            novoUsuario.put("palavraChave", palavraChave);
 
             usuarios.put(novoUsuario);
 
