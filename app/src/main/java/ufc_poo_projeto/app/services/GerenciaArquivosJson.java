@@ -1,6 +1,9 @@
 package ufc_poo_projeto.app.services;
 
 import org.json.JSONArray;
+import ufc_poo_projeto.app.exceptions.ArquivoNaoEncontradoException;
+import ufc_poo_projeto.app.exceptions.GerenciadorEstadoException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -21,12 +24,12 @@ public class GerenciaArquivosJson {
             fileWriter.flush();
             fileWriter.close();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new GerenciadorEstadoException("Erro ao carregar estados: " + e.getMessage(), e);
         }
 
     }
 
-    public static JSONArray carregarArquivo (String nomeArquivo) {
+    public static JSONArray carregarArquivo (String nomeArquivo) throws FileNotFoundException {
         if (!nomeArquivo.contains(".txt")) {
             nomeArquivo += ".txt";
         }
@@ -46,7 +49,9 @@ public class GerenciaArquivosJson {
 
             return new JSONArray(jsonContent.toString());
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new ArquivoNaoEncontradoException("Erro durante o carregamento do arquivo: " + nomeArquivo);
+        } catch (Exception e) {
+            throw new GerenciadorEstadoException("Erro ao carregar estados: " + e.getMessage(), e);
         }
     }
 }

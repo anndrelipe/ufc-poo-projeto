@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import ufc_poo_projeto.app.services.ConverteDados;
 import ufc_poo_projeto.app.services.GerenciaArquivosJson;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class Usuario{
@@ -17,7 +18,7 @@ public class Usuario{
     private Genero genero;
     private double saldo = 700.;
 
-    public Usuario(String nome, String cpf, String email, String senha, String genero){
+    public Usuario(String nome, String cpf, String email, String senha, String genero) throws FileNotFoundException {
         this.ID = this.ultimoId() + 1;
         this.nome = nome;
         this.cpf = cpf;
@@ -80,7 +81,7 @@ public class Usuario{
         this.senha = senha;
     }
 
-    private int ultimoId () {
+    private int ultimoId () throws FileNotFoundException {
         int ultimoID = 0;
         JSONArray usuariosJson = GerenciaArquivosJson.carregarArquivo("usuarios.txt");
         ConverteDados converteDados = new ConverteDados();

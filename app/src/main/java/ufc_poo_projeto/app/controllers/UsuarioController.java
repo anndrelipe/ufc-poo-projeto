@@ -6,9 +6,11 @@ import ufc_poo_projeto.app.entities.DadosEstado;
 import ufc_poo_projeto.app.entities.DadosUsuario;
 import ufc_poo_projeto.app.entities.Genero;
 import ufc_poo_projeto.app.entities.Usuario;
+import ufc_poo_projeto.app.exceptions.ArquivoNaoEncontradoException;
 import ufc_poo_projeto.app.services.ConverteDados;
 import ufc_poo_projeto.app.services.GerenciaArquivosJson;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +19,12 @@ public class UsuarioController {
     private static DadosUsuario usuario;
 
     public static DadosUsuario buscarUsuarioPorNome (String nome) {
-        JSONArray usuariosJson = GerenciaArquivosJson.carregarArquivo("usuarios.txt");
+        JSONArray usuariosJson = null;
+        try {
+            usuariosJson = GerenciaArquivosJson.carregarArquivo("usuarios.txt");
+        } catch (FileNotFoundException e) {
+            throw new ArquivoNaoEncontradoException("Erro ao carregar arquivo usuarios.txt para buscar usuario a partir do nome.");
+        }
         ConverteDados converteDados = new ConverteDados();
 
         List<DadosUsuario> usuarios =  converteDados.mapeiaParaListaDeObjetos(usuariosJson.toString(), DadosUsuario.class);
@@ -28,7 +35,12 @@ public class UsuarioController {
     }
 
     public static void alteraInformacoes (DadosUsuario antigoUsuario, String nome, String cpf, String email, double saldo ,String genero) {
-        JSONArray usuariosJson = GerenciaArquivosJson.carregarArquivo("usuarios.txt");
+        JSONArray usuariosJson = null;
+        try {
+            usuariosJson = GerenciaArquivosJson.carregarArquivo("usuarios.txt");
+        } catch (FileNotFoundException e) {
+            throw new ArquivoNaoEncontradoException("Erro ao carregar arquivo usuarios.txt para alterar inforrmações.");
+        }
         ConverteDados converteDados = new ConverteDados();
 
         List<DadosUsuario> usuarios = converteDados.mapeiaParaListaDeObjetos(usuariosJson.toString(), DadosUsuario.class);
