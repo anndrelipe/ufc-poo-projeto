@@ -9,6 +9,8 @@ public class DadosUsuario {
     private String cpf;
     private String email;
     private String senha;
+    private Genero genero;
+    private double saldo;
 
     @JsonCreator
     public DadosUsuario (
@@ -16,13 +18,37 @@ public class DadosUsuario {
             @JsonProperty("nome") String nome,
             @JsonProperty("cpf") String cpf,
             @JsonProperty("email") String email,
-            @JsonProperty("senha") String senha
+            @JsonProperty("senha") String senha,
+            @JsonProperty("genero") String genero,
+            @JsonProperty("saldo") double saldo
     ) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
         this.senha = senha;
+        this.genero = Genero.fromString(genero);
+        this.saldo = saldo;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public Genero getGenero() {
+        return genero;
+    }
+
+    public void setGenero(Genero genero) {
+        this.genero = genero;
     }
 
     public String getNome() {

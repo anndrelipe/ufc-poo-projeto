@@ -5,12 +5,21 @@ import java.util.List;
 
 public class Estado {
 	private int userID;
-	private List<Filme> filmesAlugados;
+	private List<Filme> filmes;
+	private List<Filme> carrinho;
+
 	public Estado(int userID) {
 		this.userID = userID;
-		this.filmesAlugados = new ArrayList<>();
+		this.filmes = new ArrayList<>();
+		this.carrinho = new ArrayList<>();
 	}
-	
+
+	public Estado (DadosEstado dadosEstado) {
+		this.userID = dadosEstado.getUserID();
+		this.filmes = new ArrayList<>(dadosEstado.getFilmes().stream().map(Filme::new).toList());
+		this.carrinho = new ArrayList<>(dadosEstado.getCarrinho().stream().map(Filme::new).toList());
+	}
+
 	public int getUserID() {
 		return userID;
 	}
@@ -19,12 +28,19 @@ public class Estado {
 		this.userID = userID;
 	}
 
-	public List<Filme> getFilmesAlugados() {
-		return filmesAlugados;
+	public List<Filme> getFilmes() {
+		return filmes;
 	}
 
-	public void setFilmesAlugados(List<Filme> filmesAlugados) {
-		this.filmesAlugados = filmesAlugados;
+	public void setFilmes(List<Filme> filmes) {
+		this.filmes = filmes;
 	}
-	
+
+	public List<Filme> getCarrinho() {
+		return carrinho;
+	}
+
+	public void setCarrinho(List<Filme> carrinho) {
+		this.carrinho = carrinho;
+	}
 }

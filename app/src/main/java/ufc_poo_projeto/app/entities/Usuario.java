@@ -1,45 +1,55 @@
 package ufc_poo_projeto.app.entities;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import ufc_poo_projeto.app.services.ConverteDados;
+import ufc_poo_projeto.app.services.GerenciaArquivosJson;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.Scanner;
+import java.util.List;
 
 public class Usuario{
 
-    // Atributos
-    private static int idNaoCadastrado = 1; // ID que será atribuído a um usuário que ainda não foi cadastrado
     private final int ID;
     private String nome;
     private String cpf;
     private String email;
     private String senha;
+    private Genero genero;
+    private double saldo = 700.;
 
-    // Construtor
-    public Usuario(String nome, String cpf, String email, String senha){
-        this.ID = idNaoCadastrado++;
+    public Usuario(String nome, String cpf, String email, String senha, String genero){
+        this.ID = this.ultimoId() + 1;
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
         this.senha = senha;
+        this.genero = Genero.fromString(genero);
 
-        this.salvarUsuario(this.ID, nome, cpf, email, senha);
+        this.salvarUsuario(this.ID, nome, cpf, email, senha, this.saldo, this.genero.name());
     }
 
-
-    // Métodos
     public int getId(){
         return this.ID;
     }
 
     public String getNome(){
         return this.nome;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public Genero getGenero() {
+        return genero;
+    }
+
+    public void setGenero(Genero genero) {
+        this.genero = genero;
     }
 
     public String getCpf(){
@@ -52,10 +62,6 @@ public class Usuario{
 
     public String getSenha(){
         return this.senha;
-    }
-
-    public int getidNaoCadastrado() {
-        return idNaoCadastrado;
     }
 
     public void setNome(String nome){
@@ -74,9 +80,21 @@ public class Usuario{
         this.senha = senha;
     }
 
-    private void salvarUsuario(int id, String nome, String cpf, String email, String senha) {
+    private int ultimoId () {
+        int ultimoID = 0;
+        JSONArray usuariosJson = GerenciaArquivosJson.carregarArquivo("usuarios.txt");
+        ConverteDados converteDados = new ConverteDados();
+
+        List<DadosUsuario> usuarios = converteDados.mapeiaParaListaDeObjetos(usuariosJson.toString(), DadosUsuario.class);
+        if (!usuarios.isEmpty()) {
+            ultimoID =  usuarios.getLast().getId();
+        }
+        return ultimoID;
+    }
+
+    private void salvarUsuario(int id, String nome, String cpf, String email, String senha, double saldo ,String genero) {
         try {
-            JSONArray usuarios = this.carregarUsuarios();
+            JSONArray usuarios = GerenciaArquivosJson.carregarArquivo("usuarios.txt");
 
             JSONObject novoUsuario = new JSONObject();
             novoUsuario.put("id", id);
@@ -84,36 +102,14 @@ public class Usuario{
             novoUsuario.put("cpf", cpf);
             novoUsuario.put("email", email);
             novoUsuario.put("senha", senha);
+            novoUsuario.put("saldo", saldo);
+            novoUsuario.put("genero", genero);
 
             usuarios.put(novoUsuario);
-
-            FileWriter fileWriter = new FileWriter("src/main/java/ufc_poo_projeto/app/tables/users.txt");
-            fileWriter.write(usuarios.toString(4));
-            fileWriter.flush();
-            fileWriter.close();
+            GerenciaArquivosJson.EscreverESalvarArquivo("usuarios.txt", usuarios.toString(4));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
-    private JSONArray carregarUsuarios() {
-        File arquivo = new File("src/main/java/ufc_poo_projeto/app/tables/users.txt");
-
-        if (!arquivo.exists()) {
-            return new JSONArray();
-        }
-
-        try (Scanner scanner = new Scanner(new FileReader(arquivo))) {
-            StringBuilder jsonContent = new StringBuilder();
-
-            while (scanner.hasNextLine()) {
-                jsonContent.append(scanner.nextLine());
-            }
-
-            return new JSONArray(jsonContent.toString());
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
