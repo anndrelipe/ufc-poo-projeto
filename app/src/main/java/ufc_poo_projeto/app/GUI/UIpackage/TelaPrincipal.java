@@ -8,11 +8,13 @@ import ufc_poo_projeto.app.controllers.FilmeController;
 import ufc_poo_projeto.app.controllers.UsuarioController;
 import ufc_poo_projeto.app.entities.DadosUsuario;
 import ufc_poo_projeto.app.entities.Filme;
+import ufc_poo_projeto.app.exceptions.ArquivoNaoEncontradoException;
 import ufc_poo_projeto.app.services.GerenciadorEstado;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.List;
 
@@ -33,13 +35,19 @@ public class TelaPrincipal extends JFrame {
         this.usuarioLogado = usuarioLogado;
 
         if (usuarioLogado != null) {
-            gerenciadorEstado.setEstadoAtual(usuarioLogado.getId());
+            try {
+                gerenciadorEstado.setEstadoAtual(usuarioLogado.getId());
+            } catch (FileNotFoundException e) {
+                throw new ArquivoNaoEncontradoException("Arquivo não encontrado ao carregar estado: " + e);
+            }
         }
 
         filmesComprados = gerenciadorEstado.getEstadoAtual().getFilmes();
         carrinho = gerenciadorEstado.getEstadoAtual().getCarrinho();
 
         initComponents();
+        setTitle("Javazon");
+        setLocationRelativeTo(null); // Centraliza a janela
     }
 
     @SuppressWarnings("unchecked")
@@ -618,7 +626,7 @@ public class TelaPrincipal extends JFrame {
 
         getContentPane().add(jPanel4, java.awt.BorderLayout.CENTER);
 
-        jPanel1.setBackground(new java.awt.Color(51, 153, 255));
+        jPanel1.setBackground(new java.awt.Color(51, 102, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(200, 449));
 
         sairBtn.setFont(new java.awt.Font("DejaVu Sans Condensed", 0, 15)); // NOI18N
@@ -633,33 +641,42 @@ public class TelaPrincipal extends JFrame {
         jLabel8.setFont(new java.awt.Font("DejaVu Sans Condensed", 1, 16)); // NOI18N
         jLabel8.setText("<html><font color='rgb(0,0,153)'>JAVA</font><font color='rgb(255,255,255)'>zon Prime Video</font></html> ");
 
-        perfilBtn.setBackground(new java.awt.Color(51, 153, 255));
+        perfilBtn.setBackground(new java.awt.Color(51, 102, 255));
         perfilBtn.setFont(new java.awt.Font("DejaVu Sans Condensed", 1, 15)); // NOI18N
         perfilBtn.setForeground(new java.awt.Color(255, 255, 255));
         perfilBtn.setText("Meu perfil");
         perfilBtn.setBorder(null);
+        perfilBtn.setBorderPainted(false);
+        perfilBtn.setFocusPainted(false);
+        perfilBtn.setContentAreaFilled(false);
         perfilBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 perfilBtnActionPerformed(evt);
             }
         });
 
-        meusFilmesBtn.setBackground(new java.awt.Color(51, 153, 255));
+        meusFilmesBtn.setBackground(new java.awt.Color(51, 102, 255));
         meusFilmesBtn.setFont(new java.awt.Font("DejaVu Sans Condensed", 1, 15)); // NOI18N
         meusFilmesBtn.setForeground(new java.awt.Color(255, 255, 255));
         meusFilmesBtn.setText("Meus filmes");
         meusFilmesBtn.setBorder(null);
+        meusFilmesBtn.setBorderPainted(false);
+        meusFilmesBtn.setFocusPainted(false);
+        meusFilmesBtn.setContentAreaFilled(false);
         meusFilmesBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 meusFilmesBtnActionPerformed(evt);
             }
         });
 
-        verCarrinhoBtn.setBackground(new java.awt.Color(51, 153, 255));
+        verCarrinhoBtn.setBackground(new java.awt.Color(51, 102, 255));
         verCarrinhoBtn.setFont(new java.awt.Font("DejaVu Sans Condensed", 1, 15)); // NOI18N
         verCarrinhoBtn.setForeground(new java.awt.Color(255, 255, 255));
         verCarrinhoBtn.setText("Ver carrinho");
         verCarrinhoBtn.setBorder(null);
+        verCarrinhoBtn.setBorderPainted(false);
+        verCarrinhoBtn.setFocusPainted(false);
+        verCarrinhoBtn.setContentAreaFilled(false);
         verCarrinhoBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 verCarrinhoBtnActionPerformed(evt);
@@ -794,7 +811,11 @@ public class TelaPrincipal extends JFrame {
     }
 
     private void sairBtnActionPerformed(java.awt.event.ActionEvent evt) {
-        gerenciadorEstado.salvarEstadoAtual();
+        try {
+            gerenciadorEstado.salvarEstadoAtual();
+        } catch (FileNotFoundException e) {
+            throw new ArquivoNaoEncontradoException("Arquivo não encontrado ao salvar estado: " + e);
+        }
 
         TelaInicial telaInicial = new TelaInicial();
         telaInicial.setVisible(true);
