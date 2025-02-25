@@ -758,7 +758,7 @@ public class TelaPrincipal extends JFrame {
         }
 
         this.filmeSelecionado = filmeController.procurarPorTitulo(titulo);
-        if (filmeSelecionado != null) {
+        if (filmeSelecionado.getGenero() != null) {
             nomeFilme1.setText(filmeSelecionado.getTitulo());
             sinopse1.setText(filmeSelecionado.getSinopse().replace("\n", ""));
             genero1.setText(filmeSelecionado.getGenero());
@@ -784,6 +784,9 @@ public class TelaPrincipal extends JFrame {
                 capaPanel1.revalidate();
                 capaPanel1.repaint();
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Filme não encontrado! Verifique o título ou tente o original.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
         }
     }
 
@@ -906,7 +909,7 @@ public class TelaPrincipal extends JFrame {
         DefaultTableModel fmodel = (DefaultTableModel) tabelaFilmes.getModel();
         double totalGasto = 0;
 
-        if (usuarioLogado.getSaldo() >= Double.parseDouble(totalPreco.getText())) {
+        if (usuarioLogado.getSaldo() > Double.parseDouble(totalPreco.getText().replace(",","."))) {
 
             int resposta = JOptionPane.showConfirmDialog(
                     this,
