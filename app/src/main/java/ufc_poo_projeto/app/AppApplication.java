@@ -14,6 +14,6 @@ public class AppApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Usuario n1 = new Usuario("sgsa","awetq", "asdfas","143123","Feminino");
+//
 	}
 }
