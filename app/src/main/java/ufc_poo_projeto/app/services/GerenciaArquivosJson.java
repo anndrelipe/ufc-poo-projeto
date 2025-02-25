@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.util.Scanner;
 
 public class GerenciaArquivosJson {
-    private static String pathPadrao = "src/main/java/ufc_poo_projeto/app/tables/";
+    private static String pathPadrao = "app/src/main/java/ufc_poo_projeto/app/tables/";
 
     public static void EscreverESalvarArquivo (String nomeArquivo, String texto) {
         if (!nomeArquivo.contains(".txt")) {
