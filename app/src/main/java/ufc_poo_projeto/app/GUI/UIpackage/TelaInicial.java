@@ -5,6 +5,7 @@ import ufc_poo_projeto.app.entities.Usuario;
 import ufc_poo_projeto.app.services.Autenticador;
 
 import java.awt.CardLayout;
+import java.io.FileNotFoundException;
 import javax.swing.*;
 
 //PULE PARA LINHA 461 PARA FAZER AS MODIFICACOES DOS BOTOES MEU CARO.
@@ -341,7 +342,11 @@ public class TelaInicial extends javax.swing.JFrame {
         enterNewCadastroButton.setText("Cadastrar");
         enterNewCadastroButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                enterNewCadastroButtonActionPerformed(evt);
+                try {
+                    enterNewCadastroButtonActionPerformed(evt);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         
@@ -467,10 +472,11 @@ CadastrarPanelLayout.setVerticalGroup(
 
          if (Autenticador.validaUsuario(login, senha)) {
 
-             JOptionPane.showMessageDialog(this, "Bem-vindo(a) novamente " + login, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+             JOptionPane.showMessageDialog(this, "Este carregamento pode demorar alguns instantes...", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
              DadosUsuario usuarioValidado = UsuarioController.buscarUsuarioPorNome(login);
 
              TelaPrincipal telaprincipal = new TelaPrincipal(usuarioValidado);
+             JOptionPane.showMessageDialog(this, "Bem-vindo(a) " + login, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
              telaprincipal.setVisible(true);
              this.setVisible(false);
 
@@ -489,7 +495,7 @@ CadastrarPanelLayout.setVerticalGroup(
     }
 
     //Tela de Cadastro
-    private void enterNewCadastroButtonActionPerformed(java.awt.event.ActionEvent evt){
+    private void enterNewCadastroButtonActionPerformed(java.awt.event.ActionEvent evt) throws FileNotFoundException {
 
         String novoNome = newNameField.getText();
         String novoEmail = emailCadastrarField.getText();
