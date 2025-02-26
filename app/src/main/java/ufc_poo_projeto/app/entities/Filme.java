@@ -31,13 +31,16 @@ public class Filme {
 
     //Construtor que recebe um objeto DadosFilme
     public Filme(DadosFilme dadosFilme) {
-        this.titulo = ConsultaChatGPT.enviarRequest("Traduza o título do filme para português: " + dadosFilme.titulo() + " Retorne apenas o nome do filme em português.");
-        this.dataLancamento = ConsultaChatGPT.enviarRequest("Converta essa data para o português: " + dadosFilme.dataLancamento() + "Retorne apenas a data em português.");
+        this.titulo =  dadosFilme.titulo();
+        // this.titulo = ConsultaChatGPT.enviarRequest("Traduza o título do filme para português: " + dadosFilme.titulo() + " Retorne apenas o nome do filme em português.");
+        this.dataLancamento = dadosFilme.dataLancamento();
+        //this.dataLancamento = ConsultaChatGPT.enviarRequest("Converta essa data para o português: " + dadosFilme.dataLancamento() + "Retorne apenas a data em português.");
         this.duracao = dadosFilme.duracao();
         this.genero = dadosFilme.genero();
         this.diretor = dadosFilme.diretor();
         this.atores = dadosFilme.atores();
-        this.sinopse = ConsultaChatGPT.enviarRequest("Traduza para português o texto: " + dadosFilme.sinopse());
+        this.sinopse = dadosFilme.sinopse();
+        //this.sinopse = ConsultaChatGPT.enviarRequest("Traduza para português o texto: " + dadosFilme.sinopse());
         this.pais = dadosFilme.pais();
         this.capa = dadosFilme.capa();
     }
