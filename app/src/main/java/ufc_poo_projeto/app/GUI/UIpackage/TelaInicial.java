@@ -2,6 +2,7 @@ package ufc_poo_projeto.app.GUI.UIpackage;
 import ufc_poo_projeto.app.controllers.UsuarioController;
 import ufc_poo_projeto.app.entities.DadosUsuario;
 import ufc_poo_projeto.app.entities.Usuario;
+import ufc_poo_projeto.app.exceptions.ValidacaoUsuarioException;
 import ufc_poo_projeto.app.services.Autenticador;
 
 import java.awt.CardLayout;
@@ -470,18 +471,20 @@ CadastrarPanelLayout.setVerticalGroup(
          String login = LoginField.getText();
          String senha = new String(SenhaField.getPassword());
 
-         if (Autenticador.validaUsuario(login, senha)) {
+         try {
+             if (Autenticador.validaUsuario(login, senha)) {
 
-             JOptionPane.showMessageDialog(this, "Este carregamento pode demorar alguns instantes...", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-             DadosUsuario usuarioValidado = UsuarioController.buscarUsuarioPorNome(login);
+                 JOptionPane.showMessageDialog(this, "Este carregamento pode demorar alguns instantes...", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                 DadosUsuario usuarioValidado = UsuarioController.buscarUsuarioPorNome(login);
 
-             TelaPrincipal telaprincipal = new TelaPrincipal(usuarioValidado);
-             JOptionPane.showMessageDialog(this, "Bem-vindo(a) " + login, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-             telaprincipal.setVisible(true);
-             this.setVisible(false);
-
-         } else {
+                 TelaPrincipal telaprincipal = new TelaPrincipal(usuarioValidado);
+                 JOptionPane.showMessageDialog(this, "Bem-vindo(a) " + login, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                 telaprincipal.setVisible(true);
+                 this.setVisible(false);
+             }
+         } catch (ValidacaoUsuarioException e) {
              JOptionPane.showMessageDialog(this, "Credenciais inválidas!", "Erro", JOptionPane.ERROR_MESSAGE);
+             throw new ValidacaoUsuarioException(e.getMessage());
          }
      }
 

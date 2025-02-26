@@ -757,8 +757,9 @@ public class TelaPrincipal extends JFrame {
             return;
         }
 
-        this.filmeSelecionado = filmeController.procurarPorTitulo(titulo);
-        if (filmeSelecionado.getGenero() != null) {
+        Filme res = filmeController.procurarPorTitulo(titulo);
+        if (res.getGenero() != null) {
+            this.filmeSelecionado = res;
             nomeFilme1.setText(filmeSelecionado.getTitulo());
             sinopse1.setText(filmeSelecionado.getSinopse().replace("\n", ""));
             genero1.setText(filmeSelecionado.getGenero());
@@ -865,6 +866,10 @@ public class TelaPrincipal extends JFrame {
             model.removeRow(idParaDeletar);
             JOptionPane.showMessageDialog(this, "Filme removido do carrinho", "Mensagem", JOptionPane.INFORMATION_MESSAGE);
 
+            for (int i = idParaDeletar; i < model.getRowCount(); i++) {
+                model.setValueAt(i + 1, i, 0);
+            }
+
             int rowCount = model.getRowCount();
             totalPreco.setText(String.format("%.2f", (rowCount * 140.0)));
         }
@@ -909,7 +914,7 @@ public class TelaPrincipal extends JFrame {
         DefaultTableModel fmodel = (DefaultTableModel) tabelaFilmes.getModel();
         double totalGasto = 0;
 
-        if (usuarioLogado.getSaldo() > Double.parseDouble(totalPreco.getText().replace(",","."))) {
+        if (usuarioLogado.getSaldo() >= (model.getRowCount()*140.)) {
 
             int resposta = JOptionPane.showConfirmDialog(
                     this,
@@ -936,6 +941,8 @@ public class TelaPrincipal extends JFrame {
 
                 UsuarioController.alteraInformacoes(this.usuarioLogado, usuarioLogado.getNome(), usuarioLogado.getCpf(), usuarioLogado.getEmail(), this.usuarioLogado.getSaldo() - totalGasto, genero1.getText());
                 this.usuarioLogado.setSaldo(this.usuarioLogado.getSaldo() - totalGasto);
+                return;
+            } else {
                 return;
             }
         }
